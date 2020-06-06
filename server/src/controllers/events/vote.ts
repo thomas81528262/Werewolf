@@ -38,8 +38,40 @@ class VoteKill extends DayConditionalEvent {
     }
   }
 
-  targets({ initiatorId }: { initiatorId: number }) {
-    return [];
+  targets({ initiatorId, day }: { initiatorId: number; day: number }) {
+    const targets: Target[] = [];
+
+    const initiator = this.world.players.get(initiatorId);
+    if (!initiator || initiator.isDie) {
+      return [];
+    }
+
+    const action = this.lastAction(day, initiatorId);
+
+    if (!action) {
+      return [];
+    }
+
+    this.world.players.forEach((player) => {
+      const { isDie, id } = player;
+      
+      if (!isDie) {
+        const initiatorsId = [];
+
+        if (id === action.targetId) {
+          initiatorsId.push(action.initiatorId);
+        }
+
+        targets.push({
+          initiatorsId,
+          eventName: this.name,
+          targetId: id,
+          value: null,
+        });
+      }
+    });
+
+    return targets;
   }
 }
 

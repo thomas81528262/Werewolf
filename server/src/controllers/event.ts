@@ -1,6 +1,6 @@
 import { timeout } from "../util";
 import World from "./world";
-import { Actions } from "../models/actions";
+import { Actions, Action } from "../models/actions";
 import { State } from "../models/player";
 
 interface TargetEvent {
@@ -37,6 +37,26 @@ abstract class Event {
         this.playersLock.set(id, false);
       }
     });
+  }
+
+  protected lastAction(day: number, initiator?: number): Action {
+    let action = null;
+
+    let actions = this.actions.getAction({
+      eventName: this.name,
+      day,
+    });
+
+    if (initiator) {
+      actions = actions.filter(v=>v.initiatorId === initiator)
+    }
+
+
+    if (actions.length > 0) {
+      action = actions[actions.length - 1];
+    }
+
+    return action;
   }
 
   //default action control, remove all the initiator action, and add new action if the target is valid
@@ -106,7 +126,7 @@ abstract class Event {
 
     return this.hasRolePermission(player.role);
   }
-
+  
   abstract targets({
     initiatorId,
     day,
@@ -126,7 +146,7 @@ abstract class Event {
 
 abstract class StateEvent extends Event {
   private accessStates: State[] = [];
-  private _isEnd: boolean = false;
+  private _isEnd: boolean = true;
 
   constructor({
     name,
@@ -157,17 +177,17 @@ abstract class StateEvent extends Event {
     targetId,
     eventName,
     day,
-    state,
+
     isLock,
   }: {
     initiatorId: number;
     targetId: number;
     eventName: string;
     day: number;
-    state: State;
+
     isLock: boolean;
   }) {
-    if (!this.accessStates.includes(state)) {
+    if (this._isEnd) {
       return;
     }
     super.addAction({ initiatorId, targetId, eventName, day, isLock });
@@ -184,12 +204,8 @@ abstract class StateEvent extends Event {
     });
 
     if (isEnd) {
-      this.end();
+      this._isEnd = true;
     }
-  }
-
-  end() {
-    this._isEnd = false;
   }
 
   get isEnd() {
@@ -200,15 +216,7 @@ abstract class StateEvent extends Event {
 abstract class DayEvent extends Event {
   private nextEvent: DayEvent = null;
 
-  constructor({
-    name,
-    accessRole,
-  }: 
-  {
-    name: string;
-    accessRole: string[];
-    
-  }) {
+  constructor({ name, accessRole }: { name: string; accessRole: string[] }) {
     super({ name, accessRole });
   }
 

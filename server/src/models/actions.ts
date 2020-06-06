@@ -9,6 +9,12 @@ interface Action {
   date: Date;
 }
 
+interface Search {
+  day:number
+  eventName:string
+}
+
+
 class Actions {
     private _actions:Action[] = [];
     add(action:Action) {
@@ -19,9 +25,22 @@ class Actions {
         this._actions = this._actions.filter((v) => v.initiatorId !== initiatorId);
     }
 
-    getAction({eventName, day}:{eventName:string, day:number}) {
-        return this._actions.filter((v)=>v.eventName === eventName && v.day === day);
+    getAction({eventName, day}:{eventName?:string, day?:number}) {
+
+        if (eventName && day) {
+          return this._actions.filter((v)=>v.eventName === eventName && v.day === day);
+        } else if (eventName) {
+          return this._actions.filter((v)=>v.eventName === eventName);
+        } else if (day) {
+          return this._actions.filter((v)=> v.day === day);
+        }
+
+        return this._actions;
     }
+
+    
+
+   
 
 
     get statuses():Status[ ] {

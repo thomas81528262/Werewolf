@@ -1,23 +1,18 @@
 import { DayConditionalEvent, Target, TargetEvent } from "../event";
 import { Actions, Action } from "../../models/actions";
+
+
+//const eN = "WOLF_KILL";
+
+
+enum eN {
+  wolfKill="WOLF_KILL"
+}
+
+
 class WolfKill extends DayConditionalEvent {
   constructor() {
-    super({ name: "WOLF_KILL", accessRole: ["wolf"] });
-  }
-
-  private lastAction(day: number): Action {
-    let action = null;
-
-    const actions = this.actions.getAction({
-      eventName: this.name,
-      day,
-    });
-
-    if (actions.length > 0) {
-      action = actions[actions.length - 1];
-    }
-
-    return action;
+    super({ name: eN.wolfKill, accessRole: ["wolf"] });
   }
 
   
@@ -28,6 +23,9 @@ class WolfKill extends DayConditionalEvent {
         finish = false;
       }
     });
+
+      
+
 
     if (finish) {
       const targetsSet = new Set();
@@ -70,7 +68,7 @@ class WolfKill extends DayConditionalEvent {
       if (!isDie) {
         const initiatorsId = [];
 
-        if (id === action.targetId) {
+        if (id === action.targetId && initiatorId) {
           initiatorsId.push(action.initiatorId);
         }
 
@@ -89,4 +87,4 @@ class WolfKill extends DayConditionalEvent {
 
 const dayEvents = [new WolfKill()];
 
-export default { WolfKill, dayEvents };
+export default { WolfKill, dayEvents ,eN};

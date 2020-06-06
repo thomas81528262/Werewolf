@@ -35,7 +35,7 @@ export default abstract class World {
   }
 
   addPlayer({ role, id }) {
-    const player = new Player({ id, role });
+    const player = new Player({ id, role ,world:this});
     this._players.set(id, player);
     this.stateEvents.forEach((stateEvent) => {
       if (stateEvent.hasIdPermission({ initiatorId: id })) {
@@ -85,6 +85,9 @@ export default abstract class World {
   set dayEvent(event: DayEvent) {
     this._dayEvent = event;
   }
+
+
+  
 
   abstract setPlayerState():void;
 }

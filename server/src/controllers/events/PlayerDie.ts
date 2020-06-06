@@ -11,7 +11,16 @@ class PlayerDie extends DayConditionalEvent {
     super({ name: "PLAYER_DIE", accessRole: [] });
   }
 
-  targets() {
+  targets({initiatorId, day}:{initiatorId:number, day:number}) {
+    if (this.waitState === State.WaitCharacter) {
+      const player = this.world.players.get(initiatorId);
+
+      if (player) {
+        const targets = player.getEventTarget({initiatorId, day});
+        return targets;
+      }
+    }
+
     return [];
   }
 
