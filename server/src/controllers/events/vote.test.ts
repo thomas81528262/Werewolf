@@ -12,7 +12,7 @@ class VoteTest extends vote.VoteKill {
 }
 
 const voteTest = new VoteTest();
-const world = new TestWorld({ dayEvents: [voteTest] });
+const world = new TestWorld({ dayEvents: [voteTest], stateEvents:[] });
 world.addPlayer({ role: "wolf", id: 0 });
 world.addPlayer({ role: "wolf", id: 1 });
 world.addPlayer({ role: "wolf", id: 2 });
@@ -24,7 +24,7 @@ test("action test", async () => {
     initiatorId: 0,
     targetId: 1,
     eventName: "VOTE_KILL",
-    isLock: true,
+    isLock: false,
   });
   world.addAction({
     initiatorId: 1,
@@ -44,5 +44,31 @@ test("action test", async () => {
     eventName: "VOTE_KILL",
     isLock: true,
   });
-  const stop = true;
+
+
+  world.addAction({
+    initiatorId: 0,
+    targetId: 3,
+    eventName: "VOTE_KILL",
+    isLock: true,
+  });
+  
+
+  expect(world.statuses).toEqual({
+    _statuses: [
+      {
+        targetId: 1,
+        eventName: "VOTE_KILL",
+        day: 0,
+        initiatorIds: [1,2,3],
+      },
+      {
+        targetId: 3,
+        eventName: "VOTE_KILL",
+        day: 0,
+        initiatorIds: [0],
+      },
+    ],
+  });
+
 });

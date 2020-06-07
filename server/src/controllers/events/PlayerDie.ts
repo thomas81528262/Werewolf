@@ -1,5 +1,6 @@
 import { DayConditionalEvent } from "../event";
 import { State as PlayerState } from "../../models/player";
+
 enum State {
   WaitResult = "WaitResult",
   WaitCharacter = "WaitCharacter",
@@ -25,8 +26,10 @@ class PlayerDie extends DayConditionalEvent {
   }
 
   start() {
-    super.start();
+
     this.waitState = State.WaitResult;
+    super.start();
+    
   }
 
   async wait() {

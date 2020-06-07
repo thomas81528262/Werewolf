@@ -38,7 +38,9 @@ class Actions {
         return this._actions;
     }
 
-    
+    clear() {
+      this._actions = [];
+    }
 
    
 
@@ -49,14 +51,16 @@ class Actions {
         this._actions.forEach((act) => {
           const { initiatorId, targetId, eventName, day } = act;
           if (targetsSet.has(targetId)) {
-            const { initiatorIds } = targetsSet.get(targetId);
+            const { initiatorIds, actions } = targetsSet.get(targetId);
             initiatorIds.push(initiatorId);
+            actions.push({...act});
           } else {
             targetsSet.set(targetId, {
               targetId,
               eventName,
               day,
               initiatorIds: [initiatorId],
+              actions:[{...act}]
             });
           }
         });

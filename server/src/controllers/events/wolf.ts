@@ -1,21 +1,17 @@
 import { DayConditionalEvent, Target, TargetEvent } from "../event";
 import { Actions, Action } from "../../models/actions";
 
-
 //const eN = "WOLF_KILL";
 
-
 enum eN {
-  wolfKill="WOLF_KILL"
+  wolfKill = "WOLF_KILL",
 }
-
 
 class WolfKill extends DayConditionalEvent {
   constructor() {
     super({ name: eN.wolfKill, accessRole: ["wolf"] });
   }
 
-  
   async wait() {
     let finish = true;
     this.playersLock.forEach((isLock) => {
@@ -23,9 +19,6 @@ class WolfKill extends DayConditionalEvent {
         finish = false;
       }
     });
-
-      
-
 
     if (finish) {
       const targetsSet = new Set();
@@ -48,7 +41,6 @@ class WolfKill extends DayConditionalEvent {
       this.next();
     }
   }
-  
 
   targets({ initiatorId, day }: { initiatorId: number; day: number }) {
     const targets: Target[] = [];
@@ -87,4 +79,4 @@ class WolfKill extends DayConditionalEvent {
 
 const dayEvents = [new WolfKill()];
 
-export default { WolfKill, dayEvents ,eN};
+export default { WolfKill, dayEvents, eN };

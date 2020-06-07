@@ -26,6 +26,15 @@ abstract class Event {
     this.accessRole = accessRole;
   }
 
+   //save all the action to the world status, and clear all the action
+   protected end() {
+    this.actions.statuses.forEach((status) => {
+      this.world.statuses.add(status);
+    });
+    this.actions.clear();
+
+  }
+
   abstract wait(): void;
 
   protected iniPlayersLock() {
@@ -165,6 +174,7 @@ abstract class StateEvent extends Event {
     this._isEnd = true;
     if (this.hasIdPermission({ initiatorId: id }) && this.isValidState(state)) {
       this.playersLock.set(id, false);
+      this._isEnd = false;
     }
   }
 
@@ -204,6 +214,7 @@ abstract class StateEvent extends Event {
     });
 
     if (isEnd) {
+      this.end();
       this._isEnd = true;
     }
   }
@@ -230,18 +241,15 @@ abstract class DayEvent extends Event {
     this.nextEvent = event;
   }
 
-  //save all the action to the world status
-  protected end() {
-    this.actions.statuses.forEach((status) => {
-      this.world.statuses.add(status);
-    });
-  }
+ 
 
   //end current event and start new event
   protected next() {
     this.end();
     if (this.nextEvent) {
       this.nextEvent.start();
+    } else {
+      this.world.end();
     }
   }
 }

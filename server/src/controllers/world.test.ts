@@ -29,7 +29,7 @@ describe("basic world test", () => {
     accessRole: ["testRole"],
     timeOut: 2,
   });
-  const world = new TestWorld({ dayEvents: [event] });
+  const world = new TestWorld({ dayEvents: [event], stateEvents:[] });
   test("add player test", async () => {
     world.addPlayer({ role: "testRole", id: 0 });
     world.addPlayer({ role: "wolf", id: 3 });

@@ -1,5 +1,5 @@
 import { DayEvent, StateEvent } from "./event";
-import  Player from "../models/player";
+import  Player, { State } from "../models/player";
 import { Statuses } from "../models/status";
 
 export default abstract class World {
@@ -8,11 +8,14 @@ export default abstract class World {
   private _dayEvent: DayEvent = null;
   private _statuses: Statuses = new Statuses();
   private stateEvents: StateEvent[] = [];
+  private isStart = false;
 
   constructor({
     dayEvents,
+    stateEvents,
   }: {
     dayEvents: DayEvent[];
+    stateEvents: StateEvent[];
   })
   {
     //connect all the day events
@@ -28,6 +31,13 @@ export default abstract class World {
         preEvent = dayEvent;
       }
     });
+
+    stateEvents.forEach((stateEvent)=>{
+      stateEvent.setWorld(this);
+    })
+
+    this.stateEvents = [...stateEvents];
+
   }
 
   get players(): ReadonlyMap<number, Player> {
@@ -71,7 +81,17 @@ export default abstract class World {
   }
 
   async start() {
-    this._dayEvent.start();
+
+    if (!this.isStart) {
+      this._day += 1;
+      this.isStart = true;
+      this._dayEvent.start();
+    } 
+    
+
+  }
+  end() {
+    this.isStart = false;
   }
 
   get day() {

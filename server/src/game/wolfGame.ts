@@ -19,7 +19,7 @@ function getEvents(roleOrder: string[]) {
 
 class WolfGame extends World {
   constructor(roleOrder: string[]) {
-    super({ dayEvents: [...getEvents(roleOrder), ...Vote.dayEvents] });
+    super({ dayEvents: [...getEvents(roleOrder), ...Vote.dayEvents], stateEvents:[] });
   }
 
   setPlayerState() {
