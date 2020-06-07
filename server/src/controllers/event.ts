@@ -12,7 +12,7 @@ interface Target {
   eventName: string;
   targetId: number;
   initiatorsId: number[];
-  value: string | number | null;
+  value: string | number | null | boolean;
 }
 
 abstract class Event {

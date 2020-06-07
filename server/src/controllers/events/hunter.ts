@@ -1,24 +1,47 @@
 import { StateEvent, Target, DayTimeingEvent } from "../event";
+import Witch from "./witch";
 import { State } from "../../models/player";
 enum eN {
   hunterKill = "HUNTER_KILL",
+  hunterInfo = "HUNTER_INFO",
 }
 
 class HunterInfo extends DayTimeingEvent {
-    targets() {
+  constructor() {
+    super({
+      name: eN.hunterInfo,
+      accessRole: ["hunter"],
+      timeOut: 1,
+    });
+  }
+  isWitchKill(day: number, initiatorId: number) {
+    return this.world.statuses.getStatuses({
+      eventName: Witch.eN.witchKill,
+      day,
+      targetId: initiatorId,
+    });
+  }
 
-        //this.world.statuses.getStatuses("")
-
-        return [];
-    }
+  targets({ initiatorId, day }: { initiatorId: number; day: number }) {
+    const canKill = !this.isWitchKill(day, initiatorId);
+    return [
+      {
+        initiatorsId: [],
+        eventName: this.name,
+        targetId: null,
+        value: canKill,
+      },
+    ];
+  }
 }
-
-
-
 
 class HunterKill extends StateEvent {
   constructor() {
-    super({ name: eN.hunterKill, accessRole: ["hunter"], accessStates: [State.Die] });
+    super({
+      name: eN.hunterKill,
+      accessRole: ["hunter"],
+      accessStates: [State.Die],
+    });
   }
 
   get isFinish() {
@@ -63,5 +86,6 @@ class HunterKill extends StateEvent {
 }
 
 const statusEvent = [new HunterKill()];
+const dayEvent = [new HunterInfo()];
 
-export default { statusEvent, eN , HunterKill};
+export default { statusEvent, eN, HunterKill,dayEvent };
