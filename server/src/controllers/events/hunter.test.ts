@@ -13,7 +13,7 @@ class VoteTest extends vote.VoteKill {
 
 const voteTest = new VoteTest();
 const world = new TestWorld({ dayEvents: [voteTest] , stateEvents:[]});
-world.addPlayer({ role: "hunter", id: 0 });
+world.addPlayer({ role: "hunter", id: 0, camp:'' });
 
 
 test("action test", async () => {

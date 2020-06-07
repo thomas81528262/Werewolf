@@ -18,9 +18,9 @@ test("action test", async () => {
     dayEvents: [playerDie],
     stateEvents: [hunterKill],
   });
-  world.addPlayer({ role: "hunter", id: 0 });
-  world.addPlayer({ role: "wolf", id: 1 });
-  world.addPlayer({ role: "wolf", id: 2 });
+  world.addPlayer({ role: "hunter", id: 0 , camp:'' });
+  world.addPlayer({ role: "wolf", id: 1 , camp:'' });
+  world.addPlayer({ role: "wolf", id: 2 , camp:'' });
   world.start();
   world.addAction({
     initiatorId: 0,

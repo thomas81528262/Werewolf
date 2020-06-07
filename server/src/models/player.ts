@@ -4,17 +4,34 @@ export enum State {
   Die,
 }
 
+
+interface TargetInfo {
+  targetId:number;
+  value: string 
+}
+
+
 export default class Player {
   private _id: number = null;
   private _role: string = null;
   private _world: World = null;
+  private _camp: string = null;
+  name: string = null;
   private _stateEvents: StateEvent[] = [];
   private _states: { state: State; day: number }[] = [];
+  private _targetsInfo = [];
 
-  constructor({ id, role, world }) {
+  constructor({ id, role, world,camp }) {
     this._id = id;
     this._role = role;
     this._world = world;
+    this._camp = camp;
+  }
+
+
+  addTargeInfo({targetId, value }:{targetId:number, value:string}) {
+    this._targetsInfo.push({targetId, value});
+
   }
 
   startEvent(state: State) {
@@ -80,6 +97,10 @@ export default class Player {
   getState(day: number) {
     const result = this._states.filter((s) => s.day === day);
     return result.sort();
+  }
+
+  get camp() {
+    return this._camp;
   }
 
   get id() {

@@ -31,8 +31,8 @@ describe("basic world test", () => {
   });
   const world = new TestWorld({ dayEvents: [event], stateEvents:[] });
   test("add player test", async () => {
-    world.addPlayer({ role: "testRole", id: 0 });
-    world.addPlayer({ role: "wolf", id: 3 });
+    world.addPlayer({ role: "testRole", id: 0 , camp:'' });
+    world.addPlayer({ role: "wolf", id: 3 , camp:'' });
   });
 
   test("add action test", async () => {

@@ -16,10 +16,10 @@ class WolfTest extends wolf.WolfKill {
 
 const wolfTest = new WolfTest();
 const world = new TestWorld({ dayEvents: [wolfTest] , stateEvents:[]});
-world.addPlayer({ role: "wolf", id: 0 });
-world.addPlayer({ role: "wolf", id: 1 });
-world.addPlayer({ role: "wolf", id: 2 });
-world.addPlayer({ role: "human", id: 3 });
+world.addPlayer({ role: "wolf", id: 0 , camp:'' });
+world.addPlayer({ role: "wolf", id: 1 , camp:'' });
+world.addPlayer({ role: "wolf", id: 2 , camp:'' });
+world.addPlayer({ role: "human", id: 3 , camp:'' });
 
 test("action test", async () => {
   world.start();

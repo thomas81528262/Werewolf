@@ -44,8 +44,8 @@ export default abstract class World {
     return this._players;
   }
 
-  addPlayer({ role, id }) {
-    const player = new Player({ id, role ,world:this});
+  addPlayer({ role, id, camp }) {
+    const player = new Player({ id, role ,world:this, camp});
     this._players.set(id, player);
     this.stateEvents.forEach((stateEvent) => {
       if (stateEvent.hasIdPermission({ initiatorId: id })) {
