@@ -1,29 +1,19 @@
-import { StateEvent, Target, DayTimeingEvent } from "../event";
-import { State } from "../../models/player";
+import { Target, DayTimeingEvent } from "../event";
+
+
 enum eN {
-  hunterKill = "HUNTER_KILL",
+  guardProtect = "GUARD_PROTECT",
 }
 
-class HunterInfo extends DayTimeingEvent {
-    targets() {
-
-        //this.world.statuses.getStatuses("")
-
-        return [];
-    }
-}
-
-
-
-
-class HunterKill extends StateEvent {
+class GuardProtect extends DayTimeingEvent {
   constructor() {
-    super({ name: eN.hunterKill, accessRole: ["hunter"], accessStates: [State.Die] });
+    super({ name: eN.guardProtect, accessRole: ["guard"], timeOut: 1 });
   }
-
-  get isFinish() {
-    return true;
+ 
+  isProtected(day:number, targetId:number):boolean {
+      return this.world.statuses.getStatuses({day:day - 1, eventName:eN.guardProtect, targetId}).length > 0
   }
+ 
 
   targets({ initiatorId, day }: { initiatorId: number; day: number }) {
     const targets: Target[] = [];
@@ -35,14 +25,12 @@ class HunterKill extends StateEvent {
 
     const action = this.lastAction(day);
 
-    if (!action) {
-      return [];
-    }
+    
 
     this.world.players.forEach((player) => {
       const { isDie, id } = player;
 
-      if (!isDie) {
+      if (!isDie && !this.isProtected(day, id)) {
         const initiatorsId = [];
 
         if (id === action.targetId) {
@@ -62,6 +50,8 @@ class HunterKill extends StateEvent {
   }
 }
 
-const statusEvent = [new HunterKill()];
 
-export default { statusEvent, eN , HunterKill};
+
+const dayEvent = [new GuardProtect];
+
+export default { dayEvent, eN, GuardProtect };

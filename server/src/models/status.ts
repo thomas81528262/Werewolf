@@ -25,9 +25,11 @@ class Statuses {
     return this._statuses.filter((v)=>v.targetId === targetId && v.day === day && v.eventName === eventName);
   }
 
-  getStatuses({eventName, day}:{eventName?:string, day?:number}) {
+  getStatuses({eventName, day, targetId}:{eventName?:string, day?:number, targetId?:number}) {
 
-    if (eventName && day) {
+    if (eventName && day && targetId) {
+      return this._statuses.filter((v)=>v.eventName === eventName && v.day === day && v.targetId === targetId);
+    }if (eventName && day) {
       return this._statuses.filter((v)=>v.eventName === eventName && v.day === day);
     } else if (eventName) {
       return this._statuses.filter((v)=>v.eventName === eventName);
