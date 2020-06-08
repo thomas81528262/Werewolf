@@ -2,13 +2,8 @@ import { StateEvent } from "../controllers/event";
 import World from "../controllers/world";
 export enum State {
   Die,
-  Chief
-}
-
-
-interface TargetInfo {
-  targetId:number;
-  value: string 
+  Chief,
+  ChiefCand
 }
 
 
@@ -115,6 +110,12 @@ export default class Player {
   get isDie(): boolean {
     return this._states.filter((s) => s.state === State.Die).length > 0;
   }
+
+  get isChiefCandidate(): boolean {
+    return this._states.filter((s)=>s.state === State.ChiefCand).length > 0;
+  }
+
+
   get isChief(): boolean {
     return this._states.filter((s)=>s.state=== State.Chief).length > 0;
   }
