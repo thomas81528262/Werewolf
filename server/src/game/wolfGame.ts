@@ -1,6 +1,8 @@
 import World from "../controllers/world";
 import Wolf from "../controllers/events/wolf";
 import Vote from "../controllers/events/vote";
+import Chief from "../controllers/events/chief";
+import ChiefCandidate from "../controllers/events/chiefCandidate"
 import { State } from "../models/player";
 import vote from "../controllers/events/vote";
 
@@ -20,7 +22,7 @@ function getEvents(dayEventOrder: string[]) {
 
 class WolfGame extends World {
   constructor(dayEventOrder: string[]) {
-    super({ dayEvents: [...getEvents(dayEventOrder), ...Vote.dayEvents], stateEvents:[] });
+    super({ dayEvents: [...getEvents(dayEventOrder), ...Chief.dayEvent,...Vote.dayEvents], stateEvents:[] });
   }
 
   setPlayerState() {

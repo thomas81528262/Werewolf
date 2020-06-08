@@ -11,6 +11,16 @@ class ChiefVote extends DayTimeingEvent {
     super({ name: eN.ChiefVote, accessRole: [], timeOut: 1 });
   }
 
+
+  start() {
+      if (this.world.day !== 1) {
+          this.next();
+      } else {
+          super.start();
+      }
+  }
+
+
   targets({ initiatorId, day }: { initiatorId: number; day: number }) {
     const targets: Target[] = [];
 
