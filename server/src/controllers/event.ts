@@ -148,7 +148,7 @@ abstract class Event {
     this.world = world;
   }
 
-  protected get name() {
+  get name() {
     return this._name;
   }
 }

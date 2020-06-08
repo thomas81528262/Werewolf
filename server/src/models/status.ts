@@ -7,7 +7,8 @@ interface Status {
   day: number;
   initiatorIds: number[];
   targetId: number;
-  actions:Action[]
+  actions:Action[];
+  times:number;
 
 }
 

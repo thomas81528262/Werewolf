@@ -5,6 +5,17 @@ class VoteKill extends DayConditionalEvent {
     super({ name: "VOTE_KILL", accessRole: [] });
   }
 
+  get chiefId() {
+    let cheifId = null;
+    this.world.players.forEach((player) => {
+      const { isChief, isDie, id } = player;
+      if (isChief && !isDie) {
+        cheifId = id;
+      }
+    });
+    return cheifId;
+  }
+
   async wait() {
     let isFinish = true;
 
@@ -15,21 +26,31 @@ class VoteKill extends DayConditionalEvent {
     });
 
     if (isFinish) {
+      let maxVotedTargets = [];
       let maxVotedNumber = 0;
-
+      const chiefId = this.chiefId;
       this.actions.statuses.forEach((status) => {
-        const { initiatorIds } = status;
-        if (initiatorIds.length > maxVotedNumber) {
+        const { initiatorIds, targetId } = status;
+        let voteNumber = initiatorIds.length;
+
+        if (!voteNumber) {
+          return;
+        }
+
+        if (initiatorIds.includes(chiefId)) {
+          voteNumber += 0.5;
+        }
+        if (voteNumber > maxVotedNumber) {
           maxVotedNumber = initiatorIds.length;
+          maxVotedTargets = [targetId];
+        } else if (voteNumber === maxVotedNumber) {
+          maxVotedTargets.push(targetId);
         }
       });
 
-      const maxVotedTargets = this.actions.statuses.filter(
-        (v) => v.initiatorIds.length === maxVotedNumber
-      );
-
       if (maxVotedNumber === 0 || maxVotedTargets.length > 1) {
         isFinish = false;
+        this.end();
       }
     }
 
@@ -54,7 +75,7 @@ class VoteKill extends DayConditionalEvent {
 
     this.world.players.forEach((player) => {
       const { isDie, id } = player;
-      
+
       if (!isDie) {
         const initiatorsId = [];
 

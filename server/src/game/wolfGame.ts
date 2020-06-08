@@ -2,14 +2,15 @@ import World from "../controllers/world";
 import Wolf from "../controllers/events/wolf";
 import Vote from "../controllers/events/vote";
 import { State } from "../models/player";
+import vote from "../controllers/events/vote";
 
 const dayEvents = [...Wolf.dayEvents];
 
-function getEvents(roleOrder: string[]) {
+function getEvents(dayEventOrder: string[]) {
   const result = [];
-  roleOrder.forEach((role) => {
+  dayEventOrder.forEach((name) => {
     dayEvents.forEach((event) => {
-      if (event.hasRolePermission(role)) {
+      if (name === event.name) {
         result.push(event);
       }
     });
@@ -18,8 +19,8 @@ function getEvents(roleOrder: string[]) {
 }
 
 class WolfGame extends World {
-  constructor(roleOrder: string[]) {
-    super({ dayEvents: [...getEvents(roleOrder), ...Vote.dayEvents], stateEvents:[] });
+  constructor(dayEventOrder: string[]) {
+    super({ dayEvents: [...getEvents(dayEventOrder), ...Vote.dayEvents], stateEvents:[] });
   }
 
   setPlayerState() {

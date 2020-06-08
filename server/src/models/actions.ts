@@ -9,14 +9,12 @@ interface Action {
   date: Date;
 }
 
-interface Search {
-  day:number
-  eventName:string
-}
+
 
 
 class Actions {
     private _actions:Action[] = [];
+    private times:number = 0;
     add(action:Action) {
         this._actions.push(action);   
     }
@@ -40,6 +38,7 @@ class Actions {
 
     clear() {
       this._actions = [];
+      this.times += 1;
     }
 
    
@@ -60,7 +59,8 @@ class Actions {
               eventName,
               day,
               initiatorIds: [initiatorId],
-              actions:[{...act}]
+              actions:[{...act}],
+              times:this.times
             });
           }
         });

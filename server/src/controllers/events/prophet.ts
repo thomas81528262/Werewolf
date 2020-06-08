@@ -1,5 +1,4 @@
 import { Target, DayTimeingEvent } from "../event";
-import Wolf from "./wolf";
 
 enum eN {
   prophetCheck = "PROPHET_CHECK"

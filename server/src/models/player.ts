@@ -2,6 +2,7 @@ import { StateEvent } from "../controllers/event";
 import World from "../controllers/world";
 export enum State {
   Die,
+  Chief
 }
 
 
@@ -113,6 +114,9 @@ export default class Player {
 
   get isDie(): boolean {
     return this._states.filter((s) => s.state === State.Die).length > 0;
+  }
+  get isChief(): boolean {
+    return this._states.filter((s)=>s.state=== State.Chief).length > 0;
   }
 
   get stateEvent(): ReadonlyArray<Readonly<StateEvent>> {
