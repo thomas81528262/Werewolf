@@ -1,8 +1,26 @@
 import { DayConditionalEvent, Target } from "../event";
 
 class VoteKill extends DayConditionalEvent {
+  isValidTarget = new Map<number, boolean>();
   constructor() {
     super({ name: "VOTE_KILL", accessRole: [] });
+  }
+
+  clearValidTarget() {
+    this.world.players.forEach((player) => {
+      const { id } = player;
+      this.isValidTarget.set(id, false);
+    });
+  }
+
+  start() {
+    this.clearValidTarget();
+    this.world.players.forEach((player) => {
+      const { id } = player;
+      this.isValidTarget.set(id, true);
+    });
+
+    super.start();
   }
 
   get chiefId() {
@@ -26,7 +44,7 @@ class VoteKill extends DayConditionalEvent {
     });
 
     if (isFinish) {
-      let maxVotedTargets = [];
+      let maxVotedTargets: number[] = [];
       let maxVotedNumber = 0;
       const chiefId = this.chiefId;
       this.actions.statuses.forEach((status) => {
@@ -49,6 +67,11 @@ class VoteKill extends DayConditionalEvent {
       });
 
       if (maxVotedNumber === 0 || maxVotedTargets.length > 1) {
+        this.clearValidTarget();
+        maxVotedTargets.forEach((targetId) => {
+          this.isValidTarget.set(targetId, true);
+        });
+
         isFinish = false;
         this.end();
       }
@@ -67,21 +90,20 @@ class VoteKill extends DayConditionalEvent {
       return [];
     }
 
-    const action = this.lastAction(day, initiatorId);
-
-    if (!action) {
-      return [];
-    }
+    const actions = this.lastAction(day, initiatorId);
 
     this.world.players.forEach((player) => {
       const { isDie, id } = player;
 
-      if (!isDie) {
+      if (!isDie && this.isValidTarget.get(id)) {
         const initiatorsId = [];
 
-        if (id === action.targetId) {
-          initiatorsId.push(action.initiatorId);
-        }
+        actions.forEach((action) => {
+          const { targetId } = action;
+          if (id === targetId) {
+            initiatorsId.push(action.initiatorId);
+          }
+        });
 
         targets.push({
           initiatorsId,

@@ -23,9 +23,13 @@ class GuardProtect extends DayTimeingEvent {
       return [];
     }
 
-    const action = this.lastAction(day);
+    const actions = this.lastAction(day);
 
-    
+    if (!actions.length) {
+      return [];
+    }
+
+    const action = actions[0];
 
     this.world.players.forEach((player) => {
       const { isDie, id } = player;

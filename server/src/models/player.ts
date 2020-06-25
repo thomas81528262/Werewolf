@@ -1,9 +1,9 @@
 import { StateEvent } from "../controllers/event";
 import World from "../controllers/world";
 export enum State {
-  Die,
-  Chief,
-  ChiefCand
+  Die="die",
+  Chief="chief",
+  ChiefCand="chiefCand"
 }
 
 

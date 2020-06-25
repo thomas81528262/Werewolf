@@ -49,20 +49,24 @@ class WolfKill extends DayConditionalEvent {
       return [];
     }
 
-    const action = this.lastAction(day);
+    const actions = this.lastAction(day);
 
-    if (!action) {
+    if (!actions.length) {
       return [];
     }
+
+    //const action = actions[0];
 
     this.world.players.forEach((player) => {
       const { isDie, id } = player;
       if (!isDie) {
         const initiatorsId = [];
 
-        if (id === action.targetId && initiatorId) {
-          initiatorsId.push(action.initiatorId);
-        }
+        actions.forEach((action) => {
+          if (id === action.targetId && initiatorId) {
+            initiatorsId.push(action.initiatorId);
+          }
+        });
 
         targets.push({
           initiatorsId,

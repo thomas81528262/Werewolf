@@ -48,7 +48,7 @@ abstract class Event {
     });
   }
 
-  protected lastAction(day: number, initiator?: number): Action {
+  protected lastAction(day: number, initiator?: number): Action[] {
     let action = null;
 
     let actions = this.actions.getAction({
@@ -60,12 +60,13 @@ abstract class Event {
       actions = actions.filter(v=>v.initiatorId === initiator)
     }
 
-
+    /*
     if (actions.length > 0) {
       action = actions[actions.length - 1];
     }
+    */
 
-    return action;
+    return actions;
   }
 
   //default action control, remove all the initiator action, and add new action if the target is valid
